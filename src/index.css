@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@layer base {
+    * {
+        margin: 0%;
+        padding: 0%;
+        box-sizing: border-box;
+    }
+}
+
+:root {
+    --color-1: #f5e900;
+    --color-2: #000000;
+    --color-3: #313131;
+}
