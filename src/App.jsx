@@ -7,7 +7,7 @@ export default function App() {
       <div className='m-auto my-10 min-w-[250px] w-[20vw]'>
         <Header />
         <Body />
-      </div>?
+      </div>
     </div>
   )
 }
