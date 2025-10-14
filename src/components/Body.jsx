@@ -1,16 +1,23 @@
-import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { setContent } from "../features/note/noteSlice"
+import Option from "./Option"
 
 const Body = () => {
 
-    const [content, setContent] = useState("")
+    const option = useSelector(state => state.note.option)
+    const dispatch = useDispatch()
 
     return (
-        <>
+        <div className="relative">
+            {
+                option &&
+                <Option />
+            }
             <textarea
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => dispatch(setContent(e.target.value))}
                 className="outline-none resize-none bg-[var(--color-3)] text-white p-2 w-full"
                 rows="10"></textarea>
-        </>
+        </div>
     )
 }
 
