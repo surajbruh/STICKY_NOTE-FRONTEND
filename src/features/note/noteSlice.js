@@ -35,6 +35,7 @@ export const noteSlice = createSlice({
     name: "note",
     initialState: {
         notes: [],
+        searchedNotes: [],
         content: "",
         option: false,
         loading: {
@@ -45,7 +46,8 @@ export const noteSlice = createSlice({
     },
     reducers: {
         setContent: (state, action) => { state.content = action.payload },
-        setNotes: (state, action) => { state.notes = action.payload }
+        setNotes: (state, action) => { state.notes = action.payload },
+        setSearchedNotes: (state, action) => { state.searchedNotes = action.payload }
     },
     extraReducers: (builder) => {
         builder
@@ -80,6 +82,6 @@ export const noteSlice = createSlice({
     }
 })
 
-export const { setOption, setContent, setNotes } = noteSlice.actions
+export const { setOption, setContent, setNotes, setSearchedNotes } = noteSlice.actions
 
 export default noteSlice.reducer

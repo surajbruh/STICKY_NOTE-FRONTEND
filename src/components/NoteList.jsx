@@ -4,10 +4,11 @@ import { Plus, X, Settings } from "lucide-react"
 import { getNotesThunk } from "../features/note/noteSlice"
 import { useDispatch, useSelector } from 'react-redux'
 import { errorToast } from "../utils/reactToast"
+import SearchBar from "./SearchBar"
 
 const NoteList = () => {
 
-    const { notes } = useSelector(state => state.note)
+    const { notes, searchedNotes } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
     const handleNotes = useCallback(async () => {
@@ -47,18 +48,26 @@ const NoteList = () => {
 
                     </div>
                 </div>
-                <h1 className="uppercase font-extrabold text-white mb-4">sticky notes</h1>
+                <h1 className="uppercase font-extrabold text-white">sticky notes</h1>
+                {/* searchbar */}
+                <SearchBar />
                 <div className="space-y-4 px-2 max-h-[20vw] scrollbar-custom overflow-auto">
                     {
-                        notes.length > 0 ?
-                            notes?.map(note =>
+                        searchedNotes.length > 0 ?
+                            searchedNotes?.map(note =>
                                 <li key={note._id}>
                                     <Note note={note} />
                                 </li>)
                             :
-                            <p className="italic text-white text-center ">
-                                No notes yet.
-                            </p>
+                            notes.length > 0 ?
+                                notes?.map(note =>
+                                    <li key={note._id}>
+                                        <Note note={note} />
+                                    </li>)
+                                :
+                                <p className="italic text-white text-center ">
+                                    No notes yet.
+                                </p>
                     }
                 </div>
             </div>
