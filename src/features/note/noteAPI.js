@@ -9,3 +9,13 @@ export const uploadNote = async (content) => {
         throw error
     }
 }
+
+export const getNotes = async () => {
+    try {
+        const response = await axiosInstance.get("/api/note/notes")
+        return response.data
+    } catch (error) {
+        console.error("GET NOTES API ERROR", error.message)
+        throw error
+    }
+}

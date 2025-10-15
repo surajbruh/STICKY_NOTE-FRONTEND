@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { uploadNote } from "./noteAPI";
+import { getNotes, uploadNote } from "./noteAPI";
 
 export const saveNoteThunk = createAsyncThunk("/note/upload", async (payload, { rejectWithValue }) => {
     try {
@@ -11,18 +11,30 @@ export const saveNoteThunk = createAsyncThunk("/note/upload", async (payload, { 
     }
 })
 
+export const getNotesThunk = createAsyncThunk("/note/notes", async (_, { rejectWithValue }) => {
+    try {
+        const response = await getNotes()
+        return response
+    } catch (error) {
+        console.error("SAVE NOTE THUNK ERROR:", error.message);
+        return rejectWithValue(error.message);
+    }
+})
+
 export const noteSlice = createSlice({
     name: "note",
     initialState: {
+        notes: [],
         content: "",
         option: false,
         loading: {
-            upload: false
+            upload: false,
+            notes: false
         }
     },
     reducers: {
-        setContent: (state, aciton) => { state.content = aciton.payload },
-        setOption: state => { state.option = !state.option }
+        setContent: (state, action) => { state.content = action.payload },
+        setNotes: (state, action) => { state.notes = action.payload }
     },
     extraReducers: (builder) => {
         builder
@@ -35,9 +47,19 @@ export const noteSlice = createSlice({
             .addCase(saveNoteThunk.fulfilled, (state) => {
                 state.loading.upload = false;
             })
+            .addCase(getNotesThunk.pending, (state) => {
+                state.loading.notes = true;
+            })
+            .addCase(getNotesThunk.rejected, (state) => {
+                state.loading.notes = false;
+            })
+            .addCase(getNotesThunk.fulfilled, (state, action) => {
+                state.notes = action.payload
+                state.loading.notes = false;
+            })
     }
 })
 
-export const { setOption, setContent } = noteSlice.actions
+export const { setOption, setContent, } = noteSlice.actions
 
 export default noteSlice.reducer
