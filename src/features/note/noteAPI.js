@@ -2,7 +2,7 @@ import axiosInstance from "../../utils/axiosInstance"
 
 export const uploadNote = async (content) => {
     try {
-        const response = await axiosInstance.post("/api/note/upload", { content })
+        const response = await axiosInstance.post("/api/notes/upload", { content })
         return response.data
     } catch (error) {
         console.error("UPLOAD NOTE API ERROR", error.message)
@@ -16,6 +16,16 @@ export const getNotes = async () => {
         return response.data
     } catch (error) {
         console.error("GET NOTES API ERROR", error.message)
+        throw error
+    }
+}
+
+export const deletNote = async (id) => {
+    try {
+        const response = await axiosInstance.delete(`/api/note/delete/${id}`)
+        return response.data
+    } catch (error) {
+        console.error("DELETE NOTE API ERROR", error.message)
         throw error
     }
 }

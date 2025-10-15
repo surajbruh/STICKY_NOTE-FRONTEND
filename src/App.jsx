@@ -5,7 +5,7 @@ import NoteList from "./components/NoteList"
 
 export default function App() {
 
-  // TODO: ADD SEARCH BAR COMPONENTS, IMPORVE UI, DELETE FEATURE, HOVER ANIMATION,
+  // TODO: ADD SEARCH BAR COMPONENTS.
   return (
     <div>
       <ToastContainer />

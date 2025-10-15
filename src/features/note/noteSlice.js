@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getNotes, uploadNote } from "./noteAPI";
+import { deletNote, getNotes, uploadNote } from "./noteAPI";
 
 export const saveNoteThunk = createAsyncThunk("/note/upload", async (payload, { rejectWithValue }) => {
     try {
@@ -21,6 +21,16 @@ export const getNotesThunk = createAsyncThunk("/note/notes", async (_, { rejectW
     }
 })
 
+export const deleteNoteThunk = createAsyncThunk("/note/delete", async (id, { rejectWithValue }) => {
+    try {
+        const response = await deletNote(id)
+        return response
+    } catch (error) {
+        console.error("DELETE NOTE THUNK ERROR:", error.message);
+        return rejectWithValue(error.message);
+    }
+})
+
 export const noteSlice = createSlice({
     name: "note",
     initialState: {
@@ -29,6 +39,7 @@ export const noteSlice = createSlice({
         option: false,
         loading: {
             upload: false,
+            delete: false,
             notes: false
         }
     },
@@ -57,9 +68,18 @@ export const noteSlice = createSlice({
                 state.notes = action.payload
                 state.loading.notes = false;
             })
+            .addCase(deleteNoteThunk.pending, (state) => {
+                state.loading.delete = true;
+            })
+            .addCase(deleteNoteThunk.rejected, (state) => {
+                state.loading.delete = false;
+            })
+            .addCase(deleteNoteThunk.fulfilled, (state, action) => {
+                state.loading.delete = false;
+            })
     }
 })
 
-export const { setOption, setContent, } = noteSlice.actions
+export const { setOption, setContent, setNotes } = noteSlice.actions
 
 export default noteSlice.reducer

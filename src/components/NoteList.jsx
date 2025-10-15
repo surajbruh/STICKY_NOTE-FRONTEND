@@ -32,14 +32,17 @@ const NoteList = () => {
                 {/* header */}
                 <div className="flex items-center justify-between text-white">
                     <button>
-                        <Plus strokeWidth={1} />
+                        <Plus
+                            className="hover:stroke-2 stroke-1" />
                     </button>
                     <div className="flex gap-4">
                         <button>
-                            <Settings strokeWidth={1} />
+                            <Settings
+                                className="hover:stroke-2 stroke-1" />
                         </button>
                         <button>
-                            <X strokeWidth={1} />
+                            <X
+                                className="hover:stroke-2 stroke-1" />
                         </button>
 
                     </div>
