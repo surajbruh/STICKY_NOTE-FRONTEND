@@ -1,20 +1,20 @@
 import { Plus, Check, Ellipsis, X, Loader2 } from 'lucide-react';
 import { saveNoteThunk, setOption } from '../features/note/noteSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { errorToast, successToast } from '../utils/reactToast';
 
 const Header = () => {
-    const { content, loading } = useSelector(state => state.note)
+    const { content, option, loading } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
     const handleSave = async () => {
         if (!content) return
 
         const resultAction = await dispatch(saveNoteThunk(content));
-        // TODO: ADD TOAST NOTIFICATION
         if (saveNoteThunk.fulfilled.match(resultAction)) {
-            console.log("Note saved successfully:", resultAction.payload);
+            successToast(`Note saved successfully`)
         } else {
-            console.error("Failed to save note:", resultAction.payload);
+            errorToast(`Failed to save note: ${resultAction.payload}`)
         }
     };
 
