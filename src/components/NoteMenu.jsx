@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { useState, useRef } from "react"
 import { Trash2, Expand, Shrink, Loader2 } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteNoteThunk, setContent, setNotes, setSelectedNote } from "../features/note/noteSlice"
+import { deleteNoteThunk, setNotes, setSelectedNote } from "../features/note/noteSlice"
 import { errorToast, successToast } from "../utils/reactToast"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
-const NoteMenu = ({ note }) => {
+const NoteMenu = ({ note, show, setShow, onExit }) => {
     const [openNote, setOpenNote] = useState(false)
 
-    const { notes, content, selectedNote, loading } = useSelector(state => state.note)
+    const { notes, loading } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
     const handleClick = () => {
@@ -17,15 +19,6 @@ const NoteMenu = ({ note }) => {
         } else {
             dispatch(setSelectedNote(note))
         }
-        // setOpenNote(!openNote)
-        // if (!openNote) {
-        //     dispatch(setSelectedNote(note))
-        //     console.log(selectedNote?.content)
-        // } else {
-        //     dispatch(setSelectedNote(null))
-        //     dispatch(setContent(null))
-        // }
-
     }
 
     const deleteNote = async () => {
@@ -44,8 +37,37 @@ const NoteMenu = ({ note }) => {
         }
     }
 
+    const containerRef = useRef(null)
+
+    useGSAP(() => {
+        const fullHeight = containerRef.current.scrollHeight
+        if (show) {
+            gsap.fromTo(containerRef.current,
+                {
+                    opacity: 0,
+                    duration: 0.25,
+                    height: "0%"
+                },
+                {
+                    opacity: 1,
+                    duration: 0.25,
+                    height: fullHeight,
+                    onComplete: () => { containerRef.current.style.height = "auto" }
+                })
+        } else {
+            gsap.to(containerRef.current,
+                {
+                    opacity: 0,
+                    height: "0%",
+                    onComplete: onExit
+                })
+        }
+    }, { dependencies: [show] })
+
     return (
-        <div className="absolute top-[150%] bg-[var(--color-4)] text-white py-2 px-1">
+        <div
+            ref={containerRef}
+            className="absolute overflow-hidden top-[150%] bg-[var(--color-4)] text-white py-2 px-1">
             {
                 <button
                     onClick={handleClick}

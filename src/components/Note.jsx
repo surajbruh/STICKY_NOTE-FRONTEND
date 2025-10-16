@@ -6,10 +6,23 @@ import { useSelector } from "react-redux"
 
 const Note = ({ note }) => {
 
+    const [mount, setMount] = useState(false)
+
     const [hover, setHover] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
 
     const { selectedNote } = useSelector(state => state.note)
+
+    const unMount = () => setMount(!mount)
+
+    const handleToggle = () => {
+        if (showMenu) {
+            setShowMenu(false)
+        } else {
+            setMount(true)
+            setShowMenu(true)
+        }
+    }
 
     return (
         <section
@@ -25,7 +38,7 @@ const Note = ({ note }) => {
                 <div className="relative text-[var(--color-1)] flex justify-end">
                     {
                         hover || showMenu ?
-                            <button onClick={() => setShowMenu(!showMenu)}>
+                            <button onClick={handleToggle}>
                                 <Ellipsis
                                     className={`text-white hover:stroke-2 stroke-1`} />
                             </button>
@@ -34,8 +47,8 @@ const Note = ({ note }) => {
                     }
                     {/* menu option */}
                     {
-                        showMenu &&
-                        <NoteMenu note={note} />
+                        mount &&
+                        <NoteMenu note={note} show={showMenu} setShow={setShowMenu} onExit={unMount} />
                     }
                 </div>
                 <p className="max-w-full overflow-hidden line-clamp-6 whitespace-pre-wrap">{note.content}</p>
