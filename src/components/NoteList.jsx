@@ -10,7 +10,7 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(useGSAP)
 
-const NoteList = ({ show, onExitComplete }) => {
+const NoteList = ({ show, toggle, onExitComplete }) => {
 
     const containerRef = useRef(null)
 
@@ -38,15 +38,15 @@ const NoteList = ({ show, onExitComplete }) => {
             // Animate in
             gsap.fromTo(
                 containerRef.current,
-                { opacity: 0, x: -40 },
-                { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+                { opacity: 0, x: "0%" },
+                { opacity: 1, x: "100%", duration: 0.5, ease: "power3.out" }
             );
         } else {
             // Animate out
             gsap.to(containerRef.current, {
                 opacity: 0,
-                x: -40,
-                duration: 0.4,
+                x: "50%",
+                duration: 0.5,
                 ease: "power3.in",
                 onComplete: onExitComplete,
             });
@@ -57,7 +57,7 @@ const NoteList = ({ show, onExitComplete }) => {
         <>
             <div
                 ref={containerRef}
-                className="min-w-[250px] w-[20vw] bg-[var(--color-4)] px-2 py-4 space-y-2">
+                className="absolute translate-x-[100%] top-0 min-w-[250px] w-[20vw] bg-[var(--color-4)] px-2 py-4 space-y-2">
                 {/* header */}
                 <div className="flex items-center justify-between text-white">
                     <button>
@@ -69,7 +69,9 @@ const NoteList = ({ show, onExitComplete }) => {
                             <Settings
                                 className="hover:stroke-2 stroke-1" />
                         </button>
-                        <button>
+                        <button
+                            className="hover:bg-red-800"
+                            onClick={toggle}>
                             <X
                                 className="hover:stroke-2 stroke-1" />
                         </button>

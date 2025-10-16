@@ -31,14 +31,14 @@ export default function App() {
   return (
     <div>
       <ToastContainer />
-      <div className="w-max z-10 m-auto my-10 flex space-x-4">
+      <div className="relative w-max z-10 m-auto my-10 flex space-x-4">
         <div className='min-w-[250px] w-[20vw]'>
           <Header toggle={handleToggle} />
           <Body />
         </div>
         {
           shouldRender &&
-          <NoteList show={showNotes} onExitComplete={handleExitComplete} />
+          <NoteList show={showNotes} toggle={handleToggle} onExitComplete={handleExitComplete} />
         }
       </div>
     </div>
