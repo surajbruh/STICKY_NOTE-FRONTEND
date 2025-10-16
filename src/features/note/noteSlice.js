@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deletNote, getNotes, uploadNote } from "./noteAPI";
+import { deletNote, getNotes, updateNote, uploadNote } from "./noteAPI";
 
 export const saveNoteThunk = createAsyncThunk("/note/upload", async (payload, { rejectWithValue }) => {
     try {
@@ -31,22 +31,35 @@ export const deleteNoteThunk = createAsyncThunk("/note/delete", async (id, { rej
     }
 })
 
+export const updateNoteThunk = createAsyncThunk("note/update", async ({ id, content }, { rejectWithValue }) => {
+    try {
+        const response = await updateNote(id, content)
+        return response
+    } catch (error) {
+        console.error("UPDATE NOTE THUNK ERROR:", error.message);
+        return rejectWithValue(error.message);
+    }
+})
+
 export const noteSlice = createSlice({
     name: "note",
     initialState: {
         notes: [],
         searchedNotes: [],
+        selectedNote: null,
         content: "",
         option: false,
         loading: {
             upload: false,
             delete: false,
+            update: false,
             notes: false
         }
     },
     reducers: {
         setContent: (state, action) => { state.content = action.payload },
         setNotes: (state, action) => { state.notes = action.payload },
+        setSelectedNote: (state, action) => { state.selectedNote = action.payload },
         setSearchedNotes: (state, action) => { state.searchedNotes = action.payload }
     },
     extraReducers: (builder) => {
@@ -79,9 +92,18 @@ export const noteSlice = createSlice({
             .addCase(deleteNoteThunk.fulfilled, (state, action) => {
                 state.loading.delete = false;
             })
+            .addCase(updateNoteThunk.pending, (state) => {
+                state.loading.update = true;
+            })
+            .addCase(updateNoteThunk.rejected, (state) => {
+                state.loading.update = false;
+            })
+            .addCase(updateNoteThunk.fulfilled, (state, action) => {
+                state.loading.update = false;
+            })
     }
 })
 
-export const { setOption, setContent, setNotes, setSearchedNotes } = noteSlice.actions
+export const { setOption, setContent, setNotes, setSearchedNotes, setSelectedNote } = noteSlice.actions
 
 export default noteSlice.reducer

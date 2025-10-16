@@ -2,10 +2,16 @@ import Header from "./components/Header"
 import Body from "./components/Body"
 import { ToastContainer } from "react-toastify"
 import NoteList from "./components/NoteList"
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
 
 export default function App() {
 
-  // TODO: ADD SEARCH BAR COMPONENTS.
+  const { selectedNote } = useSelector(state => state.note)
+  useEffect(() => {
+    console.log(`selected note: `, selectedNote)
+  }, [selectedNote])
+
   return (
     <div>
       <ToastContainer />

@@ -29,3 +29,13 @@ export const deletNote = async (id) => {
         throw error
     }
 }
+
+export const updateNote = async (id, content) => {
+    try {
+        const response = await axiosInstance.patch(`/api/note/update/${id}`, { content })
+        return response.data
+    } catch (error) {
+        console.error("UPDATE NOTE API ERROR", error.message)
+        throw error
+    }
+}
