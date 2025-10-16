@@ -3,7 +3,7 @@ import { saveNoteThunk, setNotes, setSelectedNote, updateNoteThunk } from '../fe
 import { useDispatch, useSelector } from 'react-redux';
 import { errorToast, successToast } from '../utils/reactToast';
 
-const Header = () => {
+const Header = ({ toggle }) => {
     const { notes, selectedNote, content, loading } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
@@ -22,7 +22,6 @@ const Header = () => {
             } else {
                 errorToast(`Failed to update note: ${resultAction.payload}`)
             }
-
         } else {
             const resultAction = await dispatch(saveNoteThunk(content));
             if (saveNoteThunk.fulfilled.match(resultAction)) {
@@ -62,6 +61,7 @@ const Header = () => {
                             className="hover:stroke-2 stroke-1" />}
                 </button>
                 <button
+                    onClick={toggle}
                     className='p-2'>
                     <Ellipsis
                         className="hover:stroke-2 stroke-1" />

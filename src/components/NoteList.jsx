@@ -1,12 +1,18 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import Note from "./Note"
 import { Plus, X, Settings } from "lucide-react"
 import { getNotesThunk } from "../features/note/noteSlice"
 import { useDispatch, useSelector } from 'react-redux'
 import { errorToast } from "../utils/reactToast"
 import SearchBar from "./SearchBar"
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
-const NoteList = () => {
+gsap.registerPlugin(useGSAP)
+
+const NoteList = ({ show, onExitComplete }) => {
+
+    const containerRef = useRef(null)
 
     const { notes, searchedNotes } = useSelector(state => state.note)
     const dispatch = useDispatch()
@@ -27,9 +33,31 @@ const NoteList = () => {
         console.log(notes)
     }, [notes])
 
+    useGSAP(() => {
+        if (show) {
+            // Animate in
+            gsap.fromTo(
+                containerRef.current,
+                { opacity: 0, x: -40 },
+                { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+            );
+        } else {
+            // Animate out
+            gsap.to(containerRef.current, {
+                opacity: 0,
+                x: -40,
+                duration: 0.4,
+                ease: "power3.in",
+                onComplete: onExitComplete,
+            });
+        }
+    }, { dependencies: [show] })
+
     return (
         <>
-            <div className="min-w-[250px] w-[20vw] bg-[var(--color-4)] px-2 py-4 space-y-2">
+            <div
+                ref={containerRef}
+                className="min-w-[250px] w-[20vw] bg-[var(--color-4)] px-2 py-4 space-y-2">
                 {/* header */}
                 <div className="flex items-center justify-between text-white">
                     <button>
