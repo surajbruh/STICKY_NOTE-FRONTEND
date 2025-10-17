@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Search } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchedNotes } from "../features/note/noteSlice";
+import { setLoadingSearch, setSearchedNotes, setSearchQuery } from "../features/note/noteSlice";
 
-const SearchBar = ({ query, setQuery }) => {
+const SearchBar = () => {
 
-    const { notes, searchedNotes } = useSelector(state => state.note)
+    const { notes, searchedNotes, searchQuery: query } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (!query.trim()) {
+            dispatch(setSearchedNotes([]));
+            dispatch(setLoadingSearch(false))
+            return;
+        }
+
+        dispatch(setLoadingSearch(true))
         const timeout = setTimeout(() => {
-            if (!query.trim()) {
-                dispatch(setSearchedNotes([]));
-                return;
-            }
             const filteredNotes = notes.filter((note) => (note.content).toLowerCase().includes(query.toLowerCase()))
             dispatch(setSearchedNotes(filteredNotes))
+            dispatch(setLoadingSearch(false))
         }, 500)
 
         return () => clearTimeout(timeout)
@@ -25,11 +29,15 @@ const SearchBar = ({ query, setQuery }) => {
         console.log(searchedNotes)
     }, [searchedNotes])
 
+    useEffect(() => {
+        console.log(query)
+    }, [query])
+
     return (
         <form className="mb-4 bg-[var(--color-3)] " >
             <div className='text-white flex items-center px-3 py-2 space-x-3'>
                 <input
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                     placeholder="search..."
                     className="outline-none w-full placeholder:italic "
                     type="text" />

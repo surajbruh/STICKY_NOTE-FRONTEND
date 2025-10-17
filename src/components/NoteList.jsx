@@ -13,10 +13,9 @@ gsap.registerPlugin(useGSAP);
 
 const NoteList = ({ show, toggle, onExitComplete }) => {
 
-    const [query, setQuery] = useState("")
 
     const containerRef = useRef(null);
-    const { notes, searchedNotes, loading } = useSelector((state) => state.note);
+    const { notes, searchedNotes, loading, searchQuery: query } = useSelector((state) => state.note);
     const dispatch = useDispatch();
 
     const handleNotes = useCallback(async () => {
@@ -86,11 +85,11 @@ const NoteList = ({ show, toggle, onExitComplete }) => {
                 Sticky Notes
             </h1>
 
-            <SearchBar query={query} setQuery={setQuery} />
+            <SearchBar />
 
             <ul className="space-y-3 mt-4 h-auto sm:max-h-[70vh] overflow-y-auto scrollbar-custom">
                 {
-                    loading.notes ?
+                    loading.notes || loading.search ?
                         Array.from({ length: 4 }).map((e, index) => <li key={index}><NoteSkeleton /></li>)
                         :
                         (
