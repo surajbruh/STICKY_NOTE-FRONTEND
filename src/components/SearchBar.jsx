@@ -3,9 +3,8 @@ import { Search } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchedNotes } from "../features/note/noteSlice";
 
-const SearchBar = () => {
+const SearchBar = ({ query, setQuery }) => {
 
-    const [query, setQuery] = useState("")
     const { notes, searchedNotes } = useSelector(state => state.note)
     const dispatch = useDispatch()
 

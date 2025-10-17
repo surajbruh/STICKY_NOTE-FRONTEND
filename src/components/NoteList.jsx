@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import Note from "./Note";
 import { Plus, X, Settings } from "lucide-react";
 import { getNotesThunk } from "../features/note/noteSlice";
@@ -7,12 +7,16 @@ import { errorToast } from "../utils/reactToast";
 import SearchBar from "./SearchBar";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import NoteSkeleton from "./skeletons/NoteSkeleton";
 
 gsap.registerPlugin(useGSAP);
 
 const NoteList = ({ show, toggle, onExitComplete }) => {
+
+    const [query, setQuery] = useState("")
+
     const containerRef = useRef(null);
-    const { notes, searchedNotes } = useSelector((state) => state.note);
+    const { notes, searchedNotes, loading } = useSelector((state) => state.note);
     const dispatch = useDispatch();
 
     const handleNotes = useCallback(async () => {
@@ -82,26 +86,37 @@ const NoteList = ({ show, toggle, onExitComplete }) => {
                 Sticky Notes
             </h1>
 
-            <SearchBar />
+            <SearchBar query={query} setQuery={setQuery} />
 
             <ul className="space-y-3 mt-4 h-auto sm:max-h-[70vh] overflow-y-auto scrollbar-custom">
-                {searchedNotes.length > 0
-                    ? searchedNotes.map((note) => (
-                        <li key={note._id}>
-                            <Note note={note} />
-                        </li>
-                    ))
-                    : notes.length > 0
-                        ? notes.map((note) => (
-                            <li key={note._id}>
-                                <Note note={note} />
-                            </li>
-                        ))
-                        : (
-                            <p className="italic text-white text-center mt-10">
-                                No notes yet.
-                            </p>
-                        )}
+                {
+                    loading.notes ?
+                        Array.from({ length: 4 }).map((e, index) => <li key={index}><NoteSkeleton /></li>)
+                        :
+                        (
+                            (query && searchedNotes?.length) === 0 ?
+                                <p className="text-white italic text-center" >no notes found...</p >
+                                :
+                                searchedNotes.length > 0
+                                    ? searchedNotes.map((note) => (
+                                        <li key={note._id}>
+                                            <Note note={note} />
+                                        </li>
+                                    ))
+                                    : notes.length > 0
+                                        ? notes.map((note) => (
+                                            <li key={note._id}>
+                                                <Note note={note} />
+                                            </li>
+                                        ))
+                                        : (
+                                            <p className="italic text-white text-center mt-10">
+                                                No notes yet.
+                                            </p>
+                                        )
+                        )
+                }
+
             </ul>
         </aside>
     );

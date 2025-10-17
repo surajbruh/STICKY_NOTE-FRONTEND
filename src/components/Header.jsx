@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { errorToast, successToast } from "../utils/reactToast";
 
-const Header = ({ toggle }) => {
+const Header = ({ toggle, show }) => {
     const { notes, selectedNote, content, loading } = useSelector(
         (state) => state.note
     );
@@ -77,9 +77,12 @@ const Header = ({ toggle }) => {
                         )}
                     </button>
                 }
-                <button onClick={toggle} className="p-2 sm:p-3">
-                    <Ellipsis className="hover:stroke-2 stroke-1" />
-                </button>
+                {
+                    !show &&
+                    <button onClick={toggle} className="p-2 sm:p-3">
+                        <Ellipsis className="hover:stroke-2 stroke-1" />
+                    </button>
+                }
                 {(selectedNote || content) && (
                     <button onClick={handleClear} className="p-2 sm:p-3">
                         <X className="hover:stroke-2 stroke-1" />
