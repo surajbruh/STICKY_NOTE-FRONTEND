@@ -10,10 +10,11 @@ export default function App() {
   const [showNotes, setShowNotes] = useState(false)
   const [shouldRender, setShouldRender] = useState(false)
 
-  const { selectedNote } = useSelector(state => state.note)
+  const { content, selectedNote } = useSelector(state => state.note)
   useEffect(() => {
     console.log(`selected note: `, selectedNote)
-  }, [selectedNote])
+    console.log(`content: ${content}`)
+  }, [selectedNote, content])
 
   const handleToggle = () => {
     if (showNotes) {

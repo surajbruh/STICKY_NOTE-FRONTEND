@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useRef } from "react"
 import { Trash2, Expand, Shrink, Loader2 } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteNoteThunk, setNotes, setSelectedNote } from "../features/note/noteSlice"
@@ -7,18 +7,20 @@ import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 
 const NoteMenu = ({ note, show, setShow, onExit }) => {
-    const [openNote, setOpenNote] = useState(false)
+    const containerRef = useRef(null)
 
-    const { notes, loading } = useSelector(state => state.note)
+    const { notes, selectedNote, loading } = useSelector(state => state.note)
     const dispatch = useDispatch()
 
+    const isOpen = selectedNote?._id === note?._id
+
     const handleClick = () => {
-        setOpenNote(!openNote)
-        if (openNote) {
+        if (isOpen) {
             dispatch(setSelectedNote(null))
         } else {
             dispatch(setSelectedNote(note))
         }
+        setShow(false)
     }
 
     const deleteNote = async () => {
@@ -36,8 +38,6 @@ const NoteMenu = ({ note, show, setShow, onExit }) => {
             errorToast(`Failed to delete: ${resultAction.payload}`)
         }
     }
-
-    const containerRef = useRef(null)
 
     useGSAP(() => {
         const fullHeight = containerRef.current.scrollHeight
@@ -73,7 +73,7 @@ const NoteMenu = ({ note, show, setShow, onExit }) => {
                     onClick={handleClick}
                     className="w-full p-2 hover:bg-[var(--hover-4)] flex gap-2 items-center">
                     {
-                        openNote ?
+                        (isOpen) ?
                             <>
                                 <Shrink />
                                 <span>

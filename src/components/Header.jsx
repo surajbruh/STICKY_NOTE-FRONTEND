@@ -1,5 +1,5 @@
 import { Plus, Check, Ellipsis, X, Loader2 } from 'lucide-react';
-import { saveNoteThunk, setNotes, setSelectedNote, updateNoteThunk } from '../features/note/noteSlice';
+import { saveNoteThunk, setContent, setNotes, setSelectedNote, updateNoteThunk } from '../features/note/noteSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { errorToast, successToast } from '../utils/reactToast';
 
@@ -37,6 +37,11 @@ const Header = ({ toggle }) => {
         }
     };
 
+    const handleClear = () => {
+        selectedNote && dispatch(setSelectedNote(null))
+        dispatch(setContent(""))
+    }
+
     return (
         <div className='relative bg-[var(--color-1)] text-[var(--color-2)] flex justify-between items-center'>
             {
@@ -67,9 +72,9 @@ const Header = ({ toggle }) => {
                         className="hover:stroke-2 stroke-1" />
                 </button>
                 {
-                    selectedNote &&
+                    (selectedNote || content) &&
                     <button
-                        onClick={() => dispatch(setSelectedNote(null))}
+                        onClick={handleClear}
                         className='p-2'>
                         <X
                             className="hover:stroke-2 stroke-1" />
