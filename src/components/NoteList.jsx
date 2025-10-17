@@ -35,13 +35,13 @@ const NoteList = ({ show, toggle, onExitComplete }) => {
                 gsap.fromTo(
                     containerRef.current,
                     { opacity: 0, x: "100%" },
-                    { opacity: 1, x: "0%", duration: 0.4 }
+                    { opacity: 1, x: "0%", duration: 0.5 }
                 );
             } else {
                 gsap.to(containerRef.current, {
                     opacity: 0,
                     x: "100%",
-                    duration: 0.4,
+                    duration: 0.5,
                     onComplete: onExitComplete,
                 });
             }
