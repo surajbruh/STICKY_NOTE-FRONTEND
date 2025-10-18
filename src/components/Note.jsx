@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Ellipsis } from "lucide-react"
-import { formatDate } from "../utils/formatDate"
+import { formatDate } from "../utils/utilityFunction"
 import NoteMenu from "./NoteMenu"
 import { useSelector } from "react-redux"
 
@@ -24,6 +24,8 @@ const Note = ({ note }) => {
         }
     }
 
+    const latestDate = () => (formatDate(note.updatedAt)).toUpperCase()
+
     return (
         <section
             onMouseEnter={() => setHover(true)}
@@ -43,7 +45,15 @@ const Note = ({ note }) => {
                                     className={`text-white hover:stroke-2 stroke-1`} />
                             </button>
                             :
-                            <p className="text-[12px] lg:text-[14px]">{(formatDate(note.updatedAt)).toUpperCase()} </p>
+                            (
+                                <p className="text-[12px] lg:text-[14px] italic">
+                                    {
+                                        (note?.updatedAt !== note?.createdAt)
+                                            ? `updatedAt: ${latestDate()}`
+                                            : `createdAt: ${latestDate()}`
+                                    }
+                                </p>
+                            )
                     }
                     {/* menu option */}
                     {
@@ -53,10 +63,6 @@ const Note = ({ note }) => {
                 </div>
                 <p className="max-w-full overflow-hidden line-clamp-6 whitespace-pre-wrap">{note.content}</p>
             </div>
-            {
-                (note?.updatedAt !== note?.createdAt) &&
-                <span className="absolute bottom-0 right-0 m-2 italic inline-block p-1 bg-[var(--color-3)] text-[var(--color-1)] text-[12px] lg:text-[14px]">Edited</span>
-            }
         </section >
     )
 }

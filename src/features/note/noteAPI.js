@@ -39,3 +39,13 @@ export const updateNote = async (id, content) => {
         throw error
     }
 }
+
+export const pinNote = async (id) => {
+    try {
+        const response = await axiosInstance.patch(`/api/note/pin/${id}`)
+        return response.data
+    } catch (error) {
+        console.error("PIN NOTE API ERROR", error.message)
+        throw error
+    }
+}

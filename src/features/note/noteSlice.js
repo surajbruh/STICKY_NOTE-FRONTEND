@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deletNote, getNotes, updateNote, uploadNote } from "./noteAPI";
+import { deletNote, getNotes, pinNote, updateNote, uploadNote } from "./noteAPI";
+import { sortNotes } from "../../utils/utilityFunction";
 
 export const saveNoteThunk = createAsyncThunk("/note/upload", async (payload, { rejectWithValue }) => {
     try {
@@ -41,6 +42,16 @@ export const updateNoteThunk = createAsyncThunk("note/update", async ({ id, cont
     }
 })
 
+export const pinNoteThunk = createAsyncThunk("note/pin", async (id, { rejectWithValue }) => {
+    try {
+        const response = await pinNote(id)
+        return response
+    } catch (error) {
+        console.error("PIN NOTE THUNK ERROR:", error.message);
+        return rejectWithValue(error.message);
+    }
+})
+
 export const noteSlice = createSlice({
     name: "note",
     initialState: {
@@ -55,6 +66,7 @@ export const noteSlice = createSlice({
             delete: false,
             update: false,
             search: false,
+            pin: false,
             notes: false
         }
     },
@@ -84,7 +96,7 @@ export const noteSlice = createSlice({
                 state.loading.notes = false;
             })
             .addCase(getNotesThunk.fulfilled, (state, action) => {
-                const sortedNotes = [...action.payload].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                const sortedNotes = sortNotes(action.payload)
                 state.notes = sortedNotes;
                 state.loading.notes = false;
             })
@@ -105,6 +117,15 @@ export const noteSlice = createSlice({
             })
             .addCase(updateNoteThunk.fulfilled, (state, action) => {
                 state.loading.update = false;
+            })
+            .addCase(pinNoteThunk.pending, (state) => {
+                state.loading.pin = true;
+            })
+            .addCase(pinNoteThunk.rejected, (state) => {
+                state.loading.pin = false;
+            })
+            .addCase(pinNoteThunk.fulfilled, (state, action) => {
+                state.loading.pin = false;
             })
     }
 })

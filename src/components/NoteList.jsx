@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Note from "./Note";
 import { Plus, X, Settings } from "lucide-react";
 import { getNotesThunk } from "../features/note/noteSlice";

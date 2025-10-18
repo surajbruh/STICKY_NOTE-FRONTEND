@@ -8,6 +8,7 @@ import {
 } from "../features/note/noteSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { errorToast, successToast } from "../utils/reactToast";
+import { sortNotes } from "../utils/utilityFunction";
 
 const Header = ({ toggle, show }) => {
     const { notes, selectedNote, content, loading } = useSelector(
@@ -24,10 +25,14 @@ const Header = ({ toggle, show }) => {
             );
             if (updateNoteThunk.fulfilled.match(resultAction)) {
                 const { updatedNote } = resultAction?.payload;
+
+                //update the redux state
                 const updatedNotes = notes.map((note) =>
                     note._id === updatedNote._id ? updatedNote : note
                 );
-                dispatch(setNotes(updatedNotes));
+                const sortedNotes = sortNotes(updatedNotes) //sorts the updatedNotes
+                dispatch(setNotes(sortedNotes));
+
                 successToast("Note updated successfully");
                 dispatch(setSelectedNote(null)) // clears the selected note and text
             } else {
@@ -37,8 +42,12 @@ const Header = ({ toggle, show }) => {
             const resultAction = await dispatch(saveNoteThunk(content));
             if (saveNoteThunk.fulfilled.match(resultAction)) {
                 const { newNote } = resultAction.payload;
+
+                // updates the redux state
                 const updatedNotes = [...notes, newNote];
-                dispatch(setNotes(updatedNotes));
+                const sortedNotes = sortNotes(updatedNotes) //sorts the updatedNotes
+                dispatch(setNotes(sortedNotes));
+                
                 successToast(`Note saved successfully`);
                 dispatch(setContent("")) //clears the text
             } else {
