@@ -2,7 +2,7 @@ import axiosInstance from "../../utils/axiosInstance"
 
 export const uploadNote = async (content) => {
     try {
-        const response = await axiosInstance.post("/api/notes/upload", { content })
+        const response = await axiosInstance.post("/api/notes", { content })
         return response.data
     } catch (error) {
         console.error("UPLOAD NOTE API ERROR", error.message)
@@ -12,7 +12,7 @@ export const uploadNote = async (content) => {
 
 export const getNotes = async () => {
     try {
-        const response = await axiosInstance.get("/api/note/notes")
+        const response = await axiosInstance.get("/api/notes")
         return response.data
     } catch (error) {
         console.error("GET NOTES API ERROR", error.message)
@@ -22,7 +22,7 @@ export const getNotes = async () => {
 
 export const deletNote = async (id) => {
     try {
-        const response = await axiosInstance.delete(`/api/note/delete/${id}`)
+        const response = await axiosInstance.delete(`/api/notes/${id}`)
         return response.data
     } catch (error) {
         console.error("DELETE NOTE API ERROR", error.message)
@@ -32,7 +32,7 @@ export const deletNote = async (id) => {
 
 export const updateNote = async (id, content) => {
     try {
-        const response = await axiosInstance.patch(`/api/note/update/${id}`, { content })
+        const response = await axiosInstance.patch(`/api/notes/${id}`, { content })
         return response.data
     } catch (error) {
         console.error("UPDATE NOTE API ERROR", error.message)
@@ -42,7 +42,7 @@ export const updateNote = async (id, content) => {
 
 export const pinNote = async (id) => {
     try {
-        const response = await axiosInstance.patch(`/api/note/pin/${id}`)
+        const response = await axiosInstance.patch(`/api/notes/${id}/pin`)
         return response.data
     } catch (error) {
         console.error("PIN NOTE API ERROR", error.message)
