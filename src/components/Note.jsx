@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Ellipsis } from "lucide-react"
+import { Ellipsis, Pin } from "lucide-react"
 import { formatDate } from "../utils/utilityFunction"
 import NoteMenu from "./NoteMenu"
 import { useSelector } from "react-redux"
@@ -62,6 +62,13 @@ const Note = ({ note }) => {
                     }
                 </div>
                 <p className="max-w-full overflow-hidden line-clamp-6 whitespace-pre-wrap">{note.content}</p>
+                {
+                    note?.isPinned &&
+                    <div
+                        className="absolute z-30 bottom-0 right-0 p-2" >
+                        <Pin className="fill-white stroke-1" />
+                    </div>
+                }
             </div>
         </section >
     )

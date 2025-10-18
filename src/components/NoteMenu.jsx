@@ -31,6 +31,7 @@ const NoteMenu = ({ note, show, setShow, onExit }) => {
         setPinLoading(true)
         const resultAction = await dispatch(pinNoteThunk(id))
         setPinLoading(false)
+        setShow(false)
 
         if (pinNoteThunk.fulfilled.match(resultAction)) {
             const { updatedNote } = resultAction.payload
