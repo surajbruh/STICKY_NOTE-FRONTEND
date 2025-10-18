@@ -84,7 +84,8 @@ export const noteSlice = createSlice({
                 state.loading.notes = false;
             })
             .addCase(getNotesThunk.fulfilled, (state, action) => {
-                state.notes = action.payload
+                const sortedNotes = [...action.payload].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                state.notes = sortedNotes;
                 state.loading.notes = false;
             })
             .addCase(deleteNoteThunk.pending, (state) => {

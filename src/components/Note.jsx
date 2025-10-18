@@ -13,7 +13,7 @@ const Note = ({ note }) => {
 
     const { selectedNote } = useSelector(state => state.note)
 
-    const unMount = () => setMount(!mount)
+    const unMount = () => setMount(false)
 
     const handleToggle = () => {
         if (showMenu) {
@@ -28,7 +28,7 @@ const Note = ({ note }) => {
         <section
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            className="">
+            className="relative">
             {/* header */}
             <div className="bg-[var(--color-1)] w-full h-[0.25vw]" />
 
@@ -43,7 +43,7 @@ const Note = ({ note }) => {
                                     className={`text-white hover:stroke-2 stroke-1`} />
                             </button>
                             :
-                            <p className="">{(formatDate(note.updatedAt)).toUpperCase()} </p>
+                            <p className="text-[12px] lg:text-[14px]">{(formatDate(note.updatedAt)).toUpperCase()} </p>
                     }
                     {/* menu option */}
                     {
@@ -53,6 +53,10 @@ const Note = ({ note }) => {
                 </div>
                 <p className="max-w-full overflow-hidden line-clamp-6 whitespace-pre-wrap">{note.content}</p>
             </div>
+            {
+                (note?.updatedAt !== note?.createdAt) &&
+                <span className="absolute bottom-0 right-0 m-2 italic inline-block p-1 bg-[var(--color-3)] text-[var(--color-1)] text-[12px] lg:text-[14px]">Edited</span>
+            }
         </section >
     )
 }
