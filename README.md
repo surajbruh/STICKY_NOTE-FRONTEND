@@ -15,6 +15,7 @@ It allows users to **create, edit, and delete notes**, offering a seamless and s
 ## 🚀 Features
 
 - 📝 Create, edit, and delete notes effortlessly.  
+- 📌 Pin your important notes.
 - 📋 Notes are listed in a clean, minimal, and responsive layout.  
 - 📱 Fully responsive and optimized for both mobile and desktop screens.  
 - ⚡ Smooth animations with **GSAP**.  
