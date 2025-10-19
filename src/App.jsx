@@ -43,7 +43,7 @@ export default function App() {
         "
       >
         {/* Left Section */}
-        <div className="flex-1 min-w-[350px] sm:w-[45%] lg:w-[35%] bg-transparent">
+        <div className="flex-1 min-w-[300px] sm:w-[45%] lg:w-[35%] bg-transparent">
           <Header toggle={handleToggle} show={showNotes} />
           <Body />
         </div>
